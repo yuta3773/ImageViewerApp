@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         //引数にページ番号を受け取り、番号に紐づくフラグメントをインスタンスとして返す
         override fun createFragment(position: Int): Fragment
             = ImageFragment.newInstance(resource[position])
-
     }
 
     private lateinit var binding: ActivityMainBinding

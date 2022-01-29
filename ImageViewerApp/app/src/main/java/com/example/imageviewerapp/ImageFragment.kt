@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.imageviewerapp.databinding.FragmentImageBinding
 
-//キーの保持
-private const val IMA_RES_ID = "IMA_RES_ID"
 
 class ImageFragment : Fragment() {
 
     //argumentsから取り出したものを保持する
     private var imageResId: Int? = null
+    private lateinit var binding: FragmentImageBinding
 
     //フラグメント作成時、再作成時にonCreateが呼ばれる。フラグメントの初期化
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,32 +24,15 @@ class ImageFragment : Fragment() {
         }
     }
 
-    private var _binding: FragmentImageBinding? = null
-    private val binding get() = _binding!!
     //onCreateViewはUIを描画する時に呼ばれる。レイアウト部品を作る
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentImageBinding.inflate(inflater, container, false)
+        val binding = FragmentImageBinding.inflate(inflater, container, false)
+        this.binding = binding
         return binding.root
-    }
-
-    //ビューの削除次に呼ばれる。そのまま削除するか、onCreateViewで再作成の２パターン
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    companion object {
-        //newInstanceは、このフラグメントは必ずどの画像を表示するかをアーギュメンツに保存するもの
-        fun newInstance(imageResId: Int) =
-            ImageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(IMA_RES_ID, imageResId)
-                }
-            }
     }
 
     //onCreateメソッド完了時の呼び出し
@@ -61,5 +43,17 @@ class ImageFragment : Fragment() {
         imageResId?.let {
             binding.imageView.setImageResource(it)
         }
+    }
+
+    companion object {
+        //キーの保持。constはクラスに紐ずくもの
+        private const val IMA_RES_ID = "IMA_RES_ID"
+        //newInstanceは、このフラグメントは必ずどの画像を表示するかをアーギュメンツに保存するもの
+        fun newInstance(imageResId: Int) =
+            ImageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(IMA_RES_ID, imageResId)
+                }
+            }
     }
 }
